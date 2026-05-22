@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>P2P Share - Fast, Secure, Direct</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- PWA meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="P2P Share">
+    
+    <!-- External scripts -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body class="theme-light">
+    <div id="app" class="app-container">
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-wrapper">
+                    <img src="icon.svg" alt="P2P Logo" class="app-logo">
+                </div>
+                <div class="brand-text">
+                    <h1>P2P Share</h1>
+                    <p id="connection-status" class="status">Connecting...</p>
+                </div>
+            </div>
+            <button id="pwa-install-btn" class="btn-install hidden">Install</button>
+        </header>
+
+        <main class="app-main">
+            <!-- Identity Section -->
+            <section class="card glass">
+                <div class="card-header">
+                    <h2>Your Identity</h2>
+                    <div class="id-actions">
+                        <button id="copy-id-btn" class="btn-icon" title="Copy ID">📋</button>
+                        <button id="share-id-btn" class="btn-icon" title="Share Link">📤</button>
+                    </div>
+                </div>
+                <div class="id-display-large">
+                    <span id="my-id">...</span>
+                </div>
+                <div class="card-footer">
+                    <button id="show-qr-btn" class="btn-secondary full-width">Show My QR Code</button>
+                </div>
+            </section>
+
+            <!-- Pairing Section -->
+            <section class="card glass">
+                <h2>Connect to Peer</h2>
+                <div class="pairing-box">
+                    <input type="text" id="peer-id-input" placeholder="Enter Peer ID" maxlength="6" inputmode="numeric" autocomplete="off">
+                    <div class="pairing-actions">
+                        <button id="connect-btn" class="btn-primary">Connect</button>
+                        <button id="scan-qr-btn" class="btn-secondary btn-icon-only" title="Scan QR">📸</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Active Transfer Section -->
+            <section id="transfer-section" class="card glass hidden">
+                <div class="transfer-header">
+                    <h2>Active Transfer</h2>
+                    <span class="badge success">Connected</span>
+                </div>
+                
+                <div id="drop-zone" class="drop-zone">
+                    <div class="drop-zone-content">
+                        <span class="drop-icon">📁</span>
+                        <p>Drop files here or click to choose</p>
+                        <input type="file" id="file-input" class="hidden-input">
+                    </div>
+                </div>
+
+                <div id="transfer-info" class="transfer-info hidden">
+                    <div class="file-details">
+                        <span id="file-name" class="filename-text">No file selected</span>
+                        <span id="transfer-speed" class="speed-text">0 KB/s</span>
+                    </div>
+                    <div class="progress-wrapper">
+                        <div class="progress-bar-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                        <span id="progress-text" class="progress-percent">0%</span>
+                    </div>
+                    <button id="send-btn" class="btn-primary full-width" disabled>Send File</button>
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section class="card glass">
+                <h2>Transfer History</h2>
+                <ul id="history-list" class="history-list">
+                    <!-- History items will be injected here -->
+                    <li class="empty-state">No transfers yet</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>E2E Encrypted • Direct P2P • No Server Storage</p>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="qr-modal" class="modal hidden">
+        <div class="modal-content glass-dark">
+            <span class="close-modal">&times;</span>
+            <h3>Your Sharing QR</h3>
+            <div id="qrcode"></div>
+            <p class="modal-hint">Peer can scan this to connect instantly</p>
+        </div>
+    </div>
+
+    <div id="scanner-modal" class="modal hidden">
+        <div class="modal-content glass-dark">
+            <span class="close-modal">&times;</span>
+            <h3>Scan Peer Code</h3>
+            <div id="reader"></div>
+        </div>
+    </div>
+
+    <!-- Background Decoration -->
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
